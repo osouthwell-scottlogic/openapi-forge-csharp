@@ -1,7 +1,7 @@
 {
   "name": "openapi-forge-csharp",
   "version": "0.1.0",
-  "description": "CSharp OpenAPI-Forge Client template",
+  "description": "OpenAPI-Forge CSharp template",
   "main": "index.js",
   "scripts": {
     "test": "test"

@@ -1,0 +1,22 @@
+using System.Threading.Tasks;
+
+namespace {{toNameSpace info.title}} {
+
+    // {{info.title}}
+    public interface IApiClient
+    {
+      {{#each paths}}
+      {{setVar "path" @key}}
+      {{#each this}}
+      {{#if (pathSupportsJson this)}}
+        {{#if summary}}// {{summary}}{{/if}}
+        {{#if description}}// {{description}}{{/if}}
+        public Task{{#if _response.schema}}<{{typeConvert _response.schema}}>{{/if}} {{operationId}}({{#each _sortedParameters}}{{typeConvert schema}}{{#if _optional}}?{{/if}} {{name}} {{#if schema.default}} = {{{quoteIfString schema.default}}}{{/if}}{{#unless @last}},{{/unless}}{{/each}});
+        {{#unless @last}}
+        
+        {{/unless}}
+        {{/if}}
+      {{/each}}  
+      {{/each}}
+    }
+}

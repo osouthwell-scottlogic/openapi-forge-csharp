@@ -1,0 +1,16 @@
+using System;
+using System.Collections.Generic;
+
+namespace {{toNameSpace info.title}} {
+
+  public class Configuration 
+  {
+    public Dictionary<string, string> Servers { get; set; } = new Dictionary<string, string> { {{#each servers}} { "{{description}}", "{{url}}" } {{#unless @last}},{{/unless}} {{/each}} };
+
+    public string BasePath { get; set; }
+
+    public string BearerToken { get; set; }
+
+    public string ActiveServer { get; set; }
+  }
+}

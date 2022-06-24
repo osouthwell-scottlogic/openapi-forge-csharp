@@ -1,0 +1,29 @@
+using System;
+using System.Net.Http;
+using Microsoft.Extensions.DependencyInjection;
+
+namespace {{toNameSpace info.title}} 
+{
+ 
+    public static class Startup
+    {
+        public static IServiceCollection RegisterApiClient(IServiceCollection services, Configuration configuration)
+        {
+            var serverUrl = configuration.ActiveServer == null 
+                ? configuration.Servers.First().Value
+                : configuration.Servers[configuration.ActiveServer];
+
+            services.AddHttpClient<IApiClient, ApiClient>(client => 
+            {
+                client.DefaultRequestHeaders.Clear();
+                client.DefaultRequestHeaders.Add("Accept", "application/json");
+                client.BaseAddress = new Uri($"{serverUrl}{(string.IsNullOrWhiteSpace(configuration.BasePath) ? "" : configuration.BasePath)}");
+                if(configuration.BearerToken != null){
+                    client.DefaultRequestHeaders.Add("Authorization", $"Bearer {configuration.BearerToken}");
+                }
+            });
+
+            return services;
+        }
+    }
+}

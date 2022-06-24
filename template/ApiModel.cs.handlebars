@@ -1,0 +1,31 @@
+using System;
+
+namespace {{toNameSpace info.title}} {
+
+
+{{#each components.schemas}}
+    {{#if description}}
+    /**
+    * {{description}}
+    */
+    {{/if}}
+    public class {{@key}} 
+    {
+      {{#each properties}}
+        {{#if description}}
+        // {{description}}
+        {{/if}}
+        {{#if example}}
+        // e.g. {{example}}
+        {{/if}}
+        public {{typeConvert this}} {{@key}} { get; set; }
+{{#unless @last}}
+
+{{/unless}}
+      {{/each}}
+    }
+{{#unless @last}}
+
+{{/unless}}
+{{/each}}
+}
