@@ -1,0 +1,24 @@
+{
+  "name": "openapi-forge-csharp",
+  "version": "0.1.0",
+  "description": "CSharp OpenAPI-Forge Client template",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/murcikan-scottlogic/openapi-forge-csharp.git"
+  },
+  "keywords": [
+    "openapi-forge",
+    "csharp",
+    "c#"
+  ],
+  "author": "murcikan",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/murcikan-scottlogic/openapi-forge-csharp/issues"
+  },
+  "homepage": "https://github.com/murcikan-scottlogic/openapi-forge-csharp#readme"
+}
