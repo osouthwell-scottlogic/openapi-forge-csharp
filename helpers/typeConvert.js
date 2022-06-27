@@ -14,6 +14,8 @@ fromFormat = (propFormat) => {
     case "date":
     case "date-time":
       return "DateTime";
+    case "string":
+      return "string";
     default:
       return "";
   }
