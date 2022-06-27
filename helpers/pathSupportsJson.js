@@ -1,6 +1,6 @@
 const applicationJsonContentType = "application/json";
 
-const check = (path) => {
+const pathSupportsJson = (path) => {
     if (path.requestBody) {
         if (path.requestBody.content) {
             return path.requestBody.content[applicationJsonContentType]
@@ -27,11 +27,6 @@ const check = (path) => {
     }
 
     return true;
-};
-
-const pathSupportsJson = (path) => {
-    const result = check(path);
-    console.log(`${path.operationId}: ${result}`);
 };
 
 module.exports = pathSupportsJson;

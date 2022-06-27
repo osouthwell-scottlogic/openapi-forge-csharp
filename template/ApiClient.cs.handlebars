@@ -11,7 +11,7 @@ namespace {{toNameSpace info.title}} {
     // {{info.title}}
     public class ApiClient  : IApiClient
     {
-      private const string MediaType = "application/json";
+      private const string ContentType = "application/json";
       private readonly Configuration _config;
       private readonly HttpClient _client;
 
@@ -26,7 +26,7 @@ namespace {{toNameSpace info.title}} {
       {{#if (pathSupportsJson this)}}
         public async Task{{#if _response.schema}}<{{typeConvert _response.schema}}>{{/if}} {{operationId}}({{#each _sortedParameters}}{{typeConvert schema}}{{#if _optional}}?{{/if}} {{name}} {{#if schema.default}} = {{{quoteIfString schema.default}}}{{/if}}{{#unless @last}},{{/unless}}{{/each}})
         { 
-          {{#if (bodyParameterExists _sortedParameters)}}var content = new StringContent(JsonSerializer.Serialize(body), Encoding.UTF8, MediaType);{{/if}}
+          {{#if (bodyParameterExists _sortedParameters)}}var content = new StringContent(JsonSerializer.Serialize(body), Encoding.UTF8, ContentType);{{/if}}
           {{#if (queryParametersExist _sortedParameters)}}var queryString = new StringBuilder();
           {{#each _sortedParameters}}
           {{#if (isQueryParameter this)}}
