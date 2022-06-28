@@ -1,3 +1,5 @@
+const capitaliseFirstLetter = require("./capitaliseFirstLetter");
+
 fromFormat = (propFormat) => {
   switch (propFormat) {
     case "int32":
@@ -8,12 +10,11 @@ fromFormat = (propFormat) => {
       return "float";
     case "double":
       return "double";
-    case "byte":
-    case "binary":
-      return "string";
     case "date":
     case "date-time":
       return "DateTime";
+    case "byte":
+    case "binary":
     case "string":
       return "string";
     default:
@@ -31,8 +32,8 @@ fromType = (propType, additionalProperties, items) => {
       return `${typeConvert(items)}[]`;
     // inline object definition
     case "object":
-      if (additionalProperties && additionalProperties.type === "object") {
-        return typeConvert(additionalProperties);
+      if (additionalProperties) {
+        return `Dictionary<string,${typeConvert(additionalProperties)}>`;
       } else {
         return "object";
       }
@@ -41,12 +42,12 @@ fromType = (propType, additionalProperties, items) => {
   }
 };
 
-function typeConvert(prop) {
-  if (prop == undefined) return "";
+const typeConvert = (prop) => {
+  if (prop === undefined) return "object";
 
   // resolve references
   if (prop.$ref) {
-    return prop.$ref.split("/").pop();
+    return capitaliseFirstLetter(prop.$ref.split("/").pop());
   }
 
   const type = prop.format
@@ -56,6 +57,6 @@ function typeConvert(prop) {
   return type === ""
     ? "object"
     : type;
-}
+};
 
 module.exports = typeConvert;

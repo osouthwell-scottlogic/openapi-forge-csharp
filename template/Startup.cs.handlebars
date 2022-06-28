@@ -10,9 +10,7 @@ namespace {{toNameSpace info.title}}
     {
         public static IServiceCollection RegisterApiClient(this IServiceCollection services, Configuration configuration)
         {
-            var serverUrl = configuration.ActiveServer == null 
-                ? configuration.Servers.First().Value
-                : configuration.Servers[configuration.ActiveServer];
+            var serverUrl = configuration.Servers[configuration.SelectedServerIndex];
 
             services.AddHttpClient<IApiClient, ApiClient>(client => 
             {

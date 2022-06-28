@@ -9,7 +9,7 @@ namespace {{toNameSpace info.title}} {
     * {{description}}
     */
     {{/if}}
-    public class {{@key}} 
+    public class {{capitaliseFirstLetter @key}} 
     {
       {{#each properties}}
         {{#if description}}
@@ -18,7 +18,7 @@ namespace {{toNameSpace info.title}} {
         {{#if example}}
         // e.g. {{example}}
         {{/if}}
-        public {{typeConvert this}} {{@key}} { get; set; }
+        public {{safeTypeConvert this}} {{@key}} { get; set; }
 {{#unless @last}}
 
 {{/unless}}

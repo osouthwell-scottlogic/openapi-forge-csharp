@@ -1,7 +1,5 @@
-const applicationJson = "application/json";
-
 const bodyParameterExists = (params) => {
-    return Array.isArray(params) && params.some(p => p.name === 'body');
+    return Array.isArray(params) && params.some(p => p.in === 'body');
 };
 
 module.exports = bodyParameterExists;
