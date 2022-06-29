@@ -26,7 +26,7 @@ namespace {{toSafeName info.title}} {
       {{setVar "path" @key}}
       {{#each this}}
       {{#if (pathSupportsJson this)}}
-        public async Task{{#if _response.schema}}<{{safeTypeConvert _response.schema}}>{{/if}} {{toSafeName operationId}}({{#each _sortedParameters}}{{nullableTypeConvert schema _optional}} {{name}}{{#if schema.default}} = {{{quoteIfString schema.default}}}{{/if}}{{#unless @last}}, {{/unless}}{{/each}})
+        public async Task{{#if _response.schema}}<{{safeTypeConvert _response.schema}}>{{/if}} {{toSafeName operationId}}({{#each _sortedParameters}}{{nullableTypeConvert schema _optional}} {{name}}{{#if (hasDefault schema.default)}} = {{{quoteIfString schema.default}}}{{/if}}{{#unless @last}}, {{/unless}}{{/each}})
         {
           {{#if (bodyParameterExists _sortedParameters)}}
           var content = new StringContent(JsonSerializer.Serialize(body), Encoding.UTF8, ContentType);
