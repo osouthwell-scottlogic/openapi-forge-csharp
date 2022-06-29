@@ -1,6 +1,6 @@
 using System;
 
-namespace {{toSafeName info.title}} {
+namespace {{toClassName info.title}} {
 
 
 {{#each components.schemas}}
@@ -9,7 +9,7 @@ namespace {{toSafeName info.title}} {
     * {{description}}
     */
     {{/if}}
-    public class {{toSafeName @key}} 
+    public class {{toClassName @key}} 
     {
       {{#each properties}}
         {{#if description}}

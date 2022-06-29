@@ -7,7 +7,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
-namespace {{toSafeName info.title}} {
+namespace {{toClassName info.title}} {
 
 
     // {{info.title}}
@@ -26,13 +26,13 @@ namespace {{toSafeName info.title}} {
       {{setVar "path" @key}}
       {{#each this}}
       {{#if (pathSupportsJson this)}}
-        public async Task{{#if _response.schema}}<{{safeTypeConvert _response.schema}}>{{/if}} {{toSafeName operationId}}({{#each _sortedParameters}}{{nullableTypeConvert schema _optional}} {{name}}{{#if (hasDefault schema.default)}} = {{{quoteIfString schema.default}}}{{/if}}{{#unless @last}}, {{/unless}}{{/each}})
+        public async Task{{#if _response.schema}}<{{safeTypeConvert _response.schema}}>{{/if}} {{toClassName operationId}}({{#each _sortedParameters}}{{nullableTypeConvert schema _optional}} {{toParamName name}}{{#if (hasDefault schema.default)}} = {{{quoteIfString schema.default}}}{{/if}}{{#unless @last}}, {{/unless}}{{/each}})
         {
           {{#if (bodyParameterExists _sortedParameters)}}
           var content = new StringContent(JsonSerializer.Serialize(body), Encoding.UTF8, ContentType);
           {{/if}}
           {{createQueryString _sortedParameters}}
-          var requestUri = $"{_client.BaseAddress}{{@root.path}}{{#if (queryParametersExist _sortedParameters)}}{queryString}{{/if}}";
+          var requestUri = $"{_client.BaseAddress}{{updatePathPlaceholders @root.path}}{{#if (queryParametersExist _sortedParameters)}}{queryString}{{/if}}";
           var response = await _client.{{clientMethodByVerb @key}}(requestUri{{#if (bodyParameterExists _sortedParameters)}}, content{{else if (mustHaveContentParameter @key)}}, null{{/if}});
           response.EnsureSuccessStatusCode();
           {{#if _response.schema}}
@@ -44,7 +44,7 @@ namespace {{toSafeName info.title}} {
         
         {{/unless}}
         {{else}}
-        public Task{{#if _response.schema}}<{{safeTypeConvert _response.schema}}>{{/if}} {{toSafeName operationId}}({{#each _sortedParameters}}{{nullableTypeConvert schema _optional}} {{name}}{{#if schema.default}} = {{{quoteIfString schema.default}}}{{/if}}{{#unless @last}}, {{/unless}}{{/each}})
+        public Task{{#if _response.schema}}<{{safeTypeConvert _response.schema}}>{{/if}} {{toClassName operationId}}({{#each _sortedParameters}}{{nullableTypeConvert schema _optional}} {{name}}{{#if schema.default}} = {{{quoteIfString schema.default}}}{{/if}}{{#unless @last}}, {{/unless}}{{/each}})
         {
            throw new NotImplementedException("Operation '{{operationId}}' most likely does not support json encoded requests which are not supported by openapi forge.");
         }        

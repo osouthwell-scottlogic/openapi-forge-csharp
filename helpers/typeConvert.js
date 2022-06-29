@@ -1,4 +1,4 @@
-const toSafeName = require('./toSafeName');
+const toSafeName = require('./toClassName');
 
 fromFormat = (propFormat) => {
   switch (propFormat) {
