@@ -1,5 +1,5 @@
 const toSafeName = (name) => {
-    name = name.replace(/[^a-z0-9]/gi, '');
+    name = name.replace(/[^a-z0-9_]/gi, '');
     return name.charAt(0).toUpperCase() + name.substr(1);
 };
 
