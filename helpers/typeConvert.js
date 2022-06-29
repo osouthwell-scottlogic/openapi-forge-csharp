@@ -1,4 +1,4 @@
-const capitaliseFirstLetter = require("./capitaliseFirstLetter");
+const toSafeName = require('./toSafeName');
 
 fromFormat = (propFormat) => {
   switch (propFormat) {
@@ -47,7 +47,7 @@ const typeConvert = (prop) => {
 
   // resolve references
   if (prop.$ref) {
-    return capitaliseFirstLetter(prop.$ref.split("/").pop());
+    return toSafeName(prop.$ref.split("/").pop());
   }
 
   const type = prop.format

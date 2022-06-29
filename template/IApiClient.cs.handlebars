@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
 
-namespace {{toNameSpace info.title}} {
+namespace {{toSafeName info.title}} {
 
     // {{info.title}}
     public interface IApiClient
@@ -10,7 +10,7 @@ namespace {{toNameSpace info.title}} {
       {{#each this}}
         {{#if summary}}// {{summary}}{{/if}}
         {{#if description}}// {{description}}{{/if}}
-        public Task{{#if _response.schema}}<{{safeTypeConvert _response.schema}}>{{/if}} {{capitaliseFirstLetter operationId}}({{#each _sortedParameters}}{{nullableTypeConvert schema _optional}} {{name}}{{#if schema.default}} = {{{quoteIfString schema.default}}}{{/if}}{{#unless @last}}, {{/unless}}{{/each}});
+        public Task{{#if _response.schema}}<{{safeTypeConvert _response.schema}}>{{/if}} {{toSafeName operationId}}({{#each _sortedParameters}}{{nullableTypeConvert schema _optional}} {{name}}{{#if schema.default}} = {{{quoteIfString schema.default}}}{{/if}}{{#unless @last}}, {{/unless}}{{/each}});
         {{#unless @last}}
         
         {{/unless}}
