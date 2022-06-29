@@ -1,5 +1,5 @@
 const toParamName = require("./toParamName");
 
-const updatePathParamPlaceholders = (path) => path.replace(/{(.*?)}/g, (match, p1) => '{' + toParamName(p1) + '}');
+const updatePathParamPlaceholders = (path) => path.replace(/{(.*?)}/g, (match) => '{' + toParamName(match) + '}');
 
 module.exports = updatePathParamPlaceholders;
