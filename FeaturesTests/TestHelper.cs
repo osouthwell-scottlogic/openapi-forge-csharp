@@ -20,7 +20,7 @@ namespace Features
         public TestHelper(string uniqueId)
         {
             _uniqueId = uniqueId;
-            _outputPath = $".\\generated-api\\{uniqueId}";
+            _outputPath = $".\\generated-tests\\{uniqueId}";
             _schemaFilePath = $"{_outputPath}\\schema.json";
         }
 

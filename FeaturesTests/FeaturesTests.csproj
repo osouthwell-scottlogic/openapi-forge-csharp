@@ -30,6 +30,6 @@
   </ItemGroup>
   <Target Name="PreBuild" AfterTargets="PreBuildEvent">
     <Copy SourceFiles="@(FeatureFiles)" DestinationFolder="$(TargetDir)" />
-    <RemoveDir Directories="$(TargetDir)\generated-api" />
+    <RemoveDir Directories="$(TargetDir)\generated-tests" />
   </Target>
 </Project>
