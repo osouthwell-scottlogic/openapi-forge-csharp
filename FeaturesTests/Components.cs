@@ -7,23 +7,10 @@ using RichardSzalay.MockHttp;
 namespace Features
 {
     [FeatureFile(nameof(Components) + Constants.FeatureFileExtension)]
-    public sealed class Components : Xunit.Gherkin.Quick.Feature
+    public sealed class Components : BaseFeature
     {
-        private readonly ITestOutputHelper _testOutputHelper;
-
-        private readonly TestHelper _testHelper;
-
-        private readonly MockHttpMessageHandler _mockHttp;
-
-        private object _actual;
-
-        private string _docStringContent;
-
-        public Components(ITestOutputHelper testOutputHelper)
+        public Components(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
         {
-            _testOutputHelper = testOutputHelper;
-            _testHelper = new TestHelper(System.Guid.NewGuid().ToString().Substring(0, 8));
-            _mockHttp = new MockHttpMessageHandler();
         }
 
         [Given(@"an API with the following specification")]
@@ -31,36 +18,21 @@ namespace Features
         {
             Assert.False(string.IsNullOrWhiteSpace(schema.Content), $"Parameter '{nameof(schema)}' must not be null or whitespace");
             _docStringContent = schema.Content;
-            try
-            {
-                _testHelper.GenerateApi(schema.Content);
-            }
-            catch (Exception e)
-            {
-                Assert.Null(e);
-            }
-
+            _testHelper.GenerateApi(schema.Content);
         }
 
         ///   Scenario: a response defined in the components section
         [When(@"calling the method (\w+) and the server responds with")]
         public async Task CallWithResponse(string methodName, DocString response)
         {
-            try
-            {
-                var request = _mockHttp.When("*").Respond("application/json", response.Content);
-                var apiClient = _testHelper.CreateApiClient(_mockHttp.ToHttpClient());
+            var request = _mockHttp.When("*").Respond("application/json", response.Content);
+            var apiClient = _testHelper.CreateApiClient(_mockHttp.ToHttpClient());
 
-                var methodInfo = apiClient.GetType().GetMethod(methodName);
+            var methodInfo = apiClient.GetType().GetMethod(methodName);
 
-                dynamic awaitable = methodInfo.Invoke(apiClient, null);
-                await awaitable;
-                _actual = awaitable.GetAwaiter().GetResult();
-            }
-            catch (Exception e)
-            {
-                Assert.Null(e);
-            }
+            dynamic awaitable = methodInfo.Invoke(apiClient, null);
+            await awaitable;
+            _actual = awaitable.GetAwaiter().GetResult();
         }
 
         [Then(@"the response should be of type (\w+)")]
@@ -93,24 +65,17 @@ namespace Features
             var paramStringValues = rawParameters.Split(",");
             var parameters = new object[] { paramStringValues[0], int.TryParse(paramStringValues[1], out var parsed) ? new Nullable<int>(parsed) : null };
 
-            try
-            {
-                Assert.NotNull(_docStringContent);
+            Assert.NotNull(_docStringContent);
 
-                _mockHttp.ReplyWithRequestUrl();
+            _mockHttp.ReplyWithRequestUrl();
 
-                var apiClient = _testHelper.CreateApiClient(_mockHttp.ToHttpClient());
+            var apiClient = _testHelper.CreateApiClient(_mockHttp.ToHttpClient());
 
-                var methodInfo = apiClient.GetType().GetMethod(methodName);
+            var methodInfo = apiClient.GetType().GetMethod(methodName);
 
-                dynamic awaitable = methodInfo.Invoke(apiClient, parameters);
-                await awaitable;
-                _actual = awaitable.GetAwaiter().GetResult();
-            }
-            catch (Exception e)
-            {
-                Assert.Null(e);
-            }
+            dynamic awaitable = methodInfo.Invoke(apiClient, parameters);
+            await awaitable;
+            _actual = awaitable.GetAwaiter().GetResult();
         }
 
         [Then(@"the requested URL should be (.+)")]

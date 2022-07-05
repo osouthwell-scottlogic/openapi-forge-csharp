@@ -26,9 +26,16 @@ namespace Features
 
         public void GenerateApi(string schema)
         {
-            WriteToJsonFile(schema);
-            ForgeApi();
-            GetApiClientTypes();
+            try
+            {
+                WriteToJsonFile(schema);
+                ForgeApi();
+                GetApiClientTypes();
+            }
+            catch (Exception e)
+            {
+                Assert.Null(e);
+            }
         }
 
         private void WriteToJsonFile(string fileContent)
