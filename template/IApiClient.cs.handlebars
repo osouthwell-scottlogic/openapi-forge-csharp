@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace {{toClassName info.title}} {
+{{>namespace info.title}}
 
     // {{info.title}}
     public interface IApiClient
@@ -12,7 +12,7 @@ namespace {{toClassName info.title}} {
       {{#each this}}
         {{#if summary}}// {{summary}}{{/if}}
         {{#if description}}// {{description}}{{/if}}
-        public Task{{#if _response.schema}}<{{safeTypeConvert _response.schema}}>{{/if}} {{toClassName operationId}}({{#each _sortedParameters}}{{nullableTypeConvert schema _optional}} {{toParamName name}}{{#if (hasDefault schema.default)}} = {{{quoteIfString schema.default}}}{{/if}}{{#unless @last}}, {{/unless}}{{/each}});
+        public Task{{#if _response.schema}}<{{safeTypeConvert _response.schema}}>{{/if}} {{operationId}}({{#each _sortedParameters}}{{nullableTypeConvert schema _optional}} {{toParamName name}}{{#if (hasDefault schema.default)}} = {{{quoteIfString schema.default}}}{{/if}}{{#unless @last}}, {{/unless}}{{/each}});
         {{#unless @last}}
         
         {{/unless}}

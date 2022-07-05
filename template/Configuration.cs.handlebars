@@ -1,11 +1,11 @@
 using System;
 using System.Collections.Generic;
 
-namespace {{toClassName info.title}} {
+{{>namespace info.title}}
 
   public class Configuration 
   {
-    public string[] Servers { get; set; } = new [] { {{#each servers}} "{{url}}" {{#unless @last}},{{/unless}} {{/each}} };
+    public string[] Servers { get; set; } = new string[] { {{#each servers}} "{{url}}" {{#unless @last}},{{/unless}} {{/each}} };
 
     public string BasePath { get; set; }
 

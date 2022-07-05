@@ -8,32 +8,37 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
-namespace {{toClassName info.title}} {
+{{>namespace info.title}}
 
-
+    {{#if info.title}}
     // {{info.title}}
+    {{/if}}
     public class ApiClient  : IApiClient
     {
       private const string ContentType = "application/json";
       private readonly Configuration _config;
       private readonly HttpClient _client;
+      private readonly string _baseAddress;
 
       public ApiClient(HttpClient httpClient, Configuration config) {
         _config = config;
         _client = httpClient;
+        _baseAddress = _client.BaseAddress.ToString().EndsWith("/")
+          ? _client.BaseAddress.ToString().Substring(0, _client.BaseAddress.ToString().Length - 1)
+          : _client.BaseAddress.ToString();
       }
 
       {{#each paths}}
       {{setVar "path" @key}}
       {{#each this}}
       {{#if (pathSupportsJson this)}}
-        public async Task{{#if _response.schema}}<{{safeTypeConvert _response.schema}}>{{/if}} {{toClassName operationId}}({{#each _sortedParameters}}{{nullableTypeConvert schema _optional}} {{toParamName name}}{{#if (hasDefault schema.default)}} = {{{quoteIfString schema.default}}}{{/if}}{{#unless @last}}, {{/unless}}{{/each}})
+        public async Task{{#if _response.schema}}<{{safeTypeConvert _response.schema}}>{{/if}} {{operationId}}({{#each _sortedParameters}}{{nullableTypeConvert schema _optional}} {{toParamName name}}{{#if (hasDefault schema.default)}} = {{{quoteIfString schema.default}}}{{/if}}{{#unless @last}}, {{/unless}}{{/each}})
         {
           {{#if (bodyParameterExists _sortedParameters)}}
           var content = new StringContent(JsonSerializer.Serialize(body), Encoding.UTF8, ContentType);
           {{/if}}
           {{createQueryString _sortedParameters}}
-          var requestUri = $"{_client.BaseAddress}{{updatePathPlaceholders @root.path}}{{#if (queryParametersExist _sortedParameters)}}{queryString}{{/if}}";
+          var requestUri = $"{(_baseAddress)}{{updatePathPlaceholders @root.path}}{{#if (queryParametersExist _sortedParameters)}}{queryString}{{/if}}";
           var response = await _client.{{clientMethodByVerb @key}}(requestUri{{#if (bodyParameterExists _sortedParameters)}}, content{{else if (mustHaveContentParameter @key)}}, null{{/if}});
           response.EnsureSuccessStatusCode();
           {{#if _response.schema}}
