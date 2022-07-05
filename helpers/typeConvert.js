@@ -24,6 +24,10 @@ fromFormat = (propFormat) => {
 
 fromType = (propType, additionalProperties, items) => {
   switch (propType) {
+    case "integer":
+      return "int";
+    case "number":
+      return "double";
     case "boolean":
       return "bool";
     case "string":
