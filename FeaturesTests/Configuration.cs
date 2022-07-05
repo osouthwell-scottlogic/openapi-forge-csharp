@@ -23,7 +23,6 @@ namespace Features
             _testHelper.GenerateApi(schema.Content);
         }
 
-        ///   Scenario: When there are multiple servers, the user can select which configuration to use
         [When(@"calling the method (\w+) without params")]
         public async Task CallWithoutParameters(string methodName)
         {

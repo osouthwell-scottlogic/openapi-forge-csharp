@@ -21,7 +21,6 @@ namespace Features
             _testHelper.GenerateApi(schema.Content);
         }
 
-        ///   Scenario: a response defined in the components section
         [When(@"calling the method (\w+) and the server responds with")]
         public async Task CallWithResponse(string methodName, DocString response)
         {
@@ -57,8 +56,6 @@ namespace Features
             Assert.Equal(propValue, propInfo.GetValue(_actual));
         }
 
-        /// Scenario: a parameter defined in the components section
-        /// Given an API with the following specification...
         [When(@"calling the method (\w+) with parameters ""(.+)""")]
         public async Task CallMethodWithParameters(string methodName, string rawParameters)
         {

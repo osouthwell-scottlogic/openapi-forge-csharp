@@ -16,6 +16,7 @@ namespace Features
 
         private Type _configurationType;
         private Type _apiClientType;
+        private Assembly _generatedAssembly;
 
         public TestHelper(string uniqueId)
         {
@@ -88,10 +89,9 @@ namespace Features
 
         private void StoreApiClientType()
         {
-            Assembly generatedAssembly;
-            generatedAssembly = Assembly.LoadFrom(Path.GetFullPath($"{_outputPath}\\bin\\Api{_uniqueId}.dll"));
-            _configurationType = generatedAssembly.GetType("OpenApiForge.Configuration");
-            _apiClientType = generatedAssembly.GetType("OpenApiForge.ApiClient");
+            _generatedAssembly = Assembly.LoadFrom(Path.GetFullPath($"{_outputPath}\\bin\\Api{_uniqueId}.dll"));
+            _configurationType = _generatedAssembly.GetType("OpenApiForge.Configuration");
+            _apiClientType = _generatedAssembly.GetType("OpenApiForge.ApiClient");
         }
 
         private void CreateProjectFile()
@@ -153,10 +153,16 @@ namespace Features
             return Activator.CreateInstance(_apiClientType, new object[] { client, configuration });
         }
 
+        public Type TryGetType(string typeName)
+        {
+            return _generatedAssembly.GetType($"OpenApiForge.{typeName}");
+        }
+
         public void Dispose()
         {
             _apiClientType = null;
             _configurationType = null;
+            _generatedAssembly = null;
         }
     }
 }

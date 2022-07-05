@@ -12,7 +12,7 @@
         {{#if example}}
         // e.g. {{example}}
         {{/if}}
-        public {{safeTypeConvert this}} {{@key}} { get; set; }
+        public {{nullableTypeConvert this}} {{@key}} { get; set; }
 {{#unless @last}}
 
 {{/unless}}
