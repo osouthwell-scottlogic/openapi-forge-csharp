@@ -22,6 +22,7 @@
   },
   "homepage": "https://github.com/murcikan-scottlogic/openapi-forge-csharp#readme",
   "dependencies": {
-    "handlebars": "^4.7.7"
+    "handlebars": "^4.7.7",
+    "openapi-forge": "github:scottlogic/openapi-forge"
   }
 }
