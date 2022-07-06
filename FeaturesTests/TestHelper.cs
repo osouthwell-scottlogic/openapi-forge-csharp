@@ -1,9 +1,6 @@
-using System.IO;
 using System.Diagnostics;
 using System.Reflection;
-using NSubstitute;
 using Xunit;
-using Microsoft.CodeAnalysis;
 
 namespace Features
 {
@@ -145,10 +142,17 @@ namespace Features
             var serversPropInfo = configuration.GetType().GetProperty("Servers");
             var servers = (string[])serversPropInfo.GetValue(configuration);
 
-            client.BaseAddress = servers.Length == 0
-            ? new Uri(Constants.BaseAddress)
-            : serverIndex.HasValue ? new Uri(servers[serverIndex.Value])
-                : new Uri(servers[int.TryParse(configuration.GetType().GetProperty("SelectedServerIndex").GetValue(configuration)?.ToString(), out var index) ? index : 0]);
+            if (servers.Length == 0)
+            {
+                serversPropInfo.SetValue(configuration, new string[] { Constants.BaseAddress });
+            }
+
+            if (serverIndex.HasValue)
+            {
+                configuration.GetType()
+                    .GetProperty("SelectedServerIndex")
+                    .SetValue(configuration, serverIndex.Value);
+            }
 
             return Activator.CreateInstance(_apiClientType, new object[] { client, configuration });
         }
@@ -156,6 +160,12 @@ namespace Features
         public Type TryGetType(string typeName)
         {
             return _generatedAssembly.GetType($"OpenApiForge.{typeName}");
+        }
+
+        public object JsonToTypeInstance(string typeName, string json)
+        {
+            var objType = TryGetType(typeName);
+            return System.Text.Json.JsonSerializer.Deserialize(json.Replace("'", "\""), objType);
         }
 
         public void Dispose()

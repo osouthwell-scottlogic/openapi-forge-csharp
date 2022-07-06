@@ -9,14 +9,11 @@ using Microsoft.Extensions.DependencyInjection;
     {
         public static IServiceCollection RegisterApiClient(this IServiceCollection services, Configuration configuration)
         {
-            var serverUrl = configuration.Servers[configuration.SelectedServerIndex];
-
             services.AddHttpClient<IApiClient, ApiClient>(client => 
             {
                 client.DefaultRequestHeaders.Clear();
                 client.DefaultRequestHeaders.Add("Accept", "application/json");
-                client.BaseAddress = new Uri($"{serverUrl}{(string.IsNullOrWhiteSpace(configuration.BasePath) ? "" : configuration.BasePath)}");
-                if(configuration.BearerToken != null){
+                if(!string.IsNullOrWhiteSpace(configuration.BearerToken)){
                     client.DefaultRequestHeaders.Add("Authorization", $"Bearer {configuration.BearerToken}");
                 }
             });
