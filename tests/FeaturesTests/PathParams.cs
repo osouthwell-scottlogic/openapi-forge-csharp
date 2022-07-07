@@ -14,14 +14,6 @@ namespace Features
         {
         }
 
-        [Given(@"an API with the following specification")]
-        public void Generate(DocString schema)
-        {
-            Assert.False(string.IsNullOrWhiteSpace(schema.Content), $"Parameter '{nameof(schema)}' must not be null or whitespace");
-            _docStringContent = schema.Content;
-            _testHelper.GenerateApi(schema.Content);
-        }
-
         [When(@"calling the method (\w+) with parameter(s*) ""(.+)""")]
         public async Task CallMethodWithStringParameters(string methodName, string isSimpleParam, string parametersString)
         {

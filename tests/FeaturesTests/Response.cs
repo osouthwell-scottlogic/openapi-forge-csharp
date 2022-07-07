@@ -1,19 +1,19 @@
-using Xunit.Gherkin.Quick;
-using Xunit;
-using Xunit.Abstractions;
+using System;
 using Gherkin.Ast;
 using RichardSzalay.MockHttp;
+using Xunit;
+using Xunit.Abstractions;
+using Xunit.Gherkin.Quick;
 
 namespace Features
 {
-    [FeatureFile(nameof(Deserialization) + Constants.FeatureFileExtension)]
-    public sealed class Deserialization : BaseFeature
+    [FeatureFile(nameof(Response) + Constants.FeatureFileExtension)]
+    public sealed class Response : BaseFeature
     {
-        private readonly Dictionary<string, string> _responses;
+        private readonly Dictionary<string, string> _responses = new Dictionary<string, string>();
 
-        public Deserialization(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
+        public Response(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
         {
-            _responses = new Dictionary<string, string>();
         }
 
         [When(@"calling the method (\w+) and the server responds with")]
@@ -42,25 +42,36 @@ namespace Features
         }
 
         [Then(@"the response should be of type (\w+)")]
-        public void CheckResponseType(string expectedType)
+        public void CheckResponseType(string type)
         {
-            Assert.EndsWith(expectedType, _actual.GetType().Name);
+            Assert.EndsWith(type, _actual.GetType().Name);
         }
 
-        [And(@"the response should have a property (id) with value (\d+)")]
-        public void CheckResponseIntegerProperties(string propertyName, string expectedPropValue)
+        [And(@"the response should have a property (id|value) with value (.+)")]
+        public void CheckResponseIdProperty(string propName, string propValue)
+        {
+            var propInfo = _actual.GetType().GetProperty(propName);
+            Assert.NotNull(propInfo);
+            Assert.Equal(propValue, propInfo.GetValue(_actual).ToString());
+        }
+
+        [When(@"calling the method (\w+) with parameters ""(.+)""")]
+        public async Task CallMethodWithParameters(string methodName, string rawParameters)
+        {
+            var paramStringValues = rawParameters.Split(",");
+            var parameters = new object[] { paramStringValues[0], int.TryParse(paramStringValues[1], out var parsed)
+            ? new Nullable<int>(parsed)
+            : null };
+
+            await CallMethod(methodName, parameters);
+        }
+
+        [And(@"the response should have a property (date|dateTime) with value ([\d-:.TZ]+)")]
+        public void CheckDateValueProperty(string propertyName, string expectedPropValue)
         {
             var propInfo = _actual.GetType().GetProperty(propertyName);
             Assert.NotNull(propInfo);
-            Assert.Equal(int.Parse(expectedPropValue), propInfo.GetValue(_actual));
-        }
-
-        [And(@"the response should have a property (value) with value (\w+)")]
-        public void CheckResponseStringProperty(string propertyName, string expectedPropValue)
-        {
-            var propInfo = _actual.GetType().GetProperty(propertyName);
-            Assert.NotNull(propInfo);
-            Assert.Equal(expectedPropValue, propInfo.GetValue(_actual));
+            Assert.Equal(DateTime.Parse(expectedPropValue).ToUniversalTime(), propInfo.GetValue(_actual));
         }
 
         [And(@"the response should be equal to (""[\w\s]+"")")]
@@ -75,18 +86,22 @@ namespace Features
             Assert.True(_actual.GetType().IsArray);
         }
 
+        [When(@"calling the method (\w+) and the server provides an empty response")]
+        public async Task WhenEmptyResponse(string methodName)
+        {
+            await CallMethod(methodName);
+        }
+
+        [Then(@"the response should be null")]
+        public void ThenResponseTypeIsTask()
+        {
+            Assert.Null(_actual);
+        }
+
         [When(@"extracting the object at index (\d)")]
         public void CheckArrayResponseType(string index)
         {
             _actual = ((object[])_actual)[int.Parse(index)];
-        }
-
-        [And(@"the response should have a property (date|dateTime) with value ([\d-:.TZ]+)")]
-        public void CheckDateValueProperty(string propertyName, string expectedPropValue)
-        {
-            var propInfo = _actual.GetType().GetProperty(propertyName);
-            Assert.NotNull(propInfo);
-            Assert.Equal(DateTime.Parse(expectedPropValue).ToUniversalTime(), propInfo.GetValue(_actual));
         }
 
         [Then(@"the response should have a property (cats) with value (\d+)")]

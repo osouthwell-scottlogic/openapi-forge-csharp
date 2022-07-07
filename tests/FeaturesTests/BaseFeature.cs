@@ -1,5 +1,6 @@
 using System;
 using System.Reflection;
+using Gherkin.Ast;
 using RichardSzalay.MockHttp;
 using Xunit;
 using Xunit.Abstractions;
@@ -26,6 +27,14 @@ namespace Features
             _testOutputHelper = testOutputHelper;
             _testHelper = new TestHelper(System.Guid.NewGuid().ToString().Substring(0, 8));
             _mockHttp = new MockHttpMessageHandler();
+        }
+
+        [Given(@"an API with the following specification")]
+        public void Generate(DocString schema)
+        {
+            Assert.False(string.IsNullOrWhiteSpace(schema.Content), $"Parameter '{nameof(schema)}' must not be null or whitespace");
+            _docStringContent = schema.Content;
+            _testHelper.GenerateApi(schema.Content);
         }
 
         [Then(@"the requested URL should be (.+)")]
@@ -59,7 +68,10 @@ namespace Features
 
             dynamic awaitable = methodInfo.Invoke(apiClient, GetMethodArgs(methodParameters, parameters));
             await awaitable;
-            _actual = awaitable.GetAwaiter().GetResult();
+            if (methodInfo.ReturnType.GenericTypeArguments.Length > 0)
+            {
+                _actual = awaitable.GetAwaiter().GetResult();
+            }
         }
 
         private static object[] GetMethodArgs(ParameterInfo[] paramInfos, object[] arguments)
