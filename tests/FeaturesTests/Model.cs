@@ -2,7 +2,6 @@ using Xunit.Gherkin.Quick;
 using Xunit;
 using Xunit.Abstractions;
 using Gherkin.Ast;
-using RichardSzalay.MockHttp;
 
 namespace Features
 {

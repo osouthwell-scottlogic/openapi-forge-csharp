@@ -1,8 +1,8 @@
-using Xunit.Gherkin.Quick;
-using Xunit;
-using Xunit.Abstractions;
 using Gherkin.Ast;
 using RichardSzalay.MockHttp;
+using Xunit;
+using Xunit.Abstractions;
+using Xunit.Gherkin.Quick;
 
 namespace Features
 {
@@ -24,14 +24,7 @@ namespace Features
         [When(@"calling the method (\w+) and the server responds with")]
         public async Task CallWithResponse(string methodName, DocString response)
         {
-            var request = _mockHttp.When("*").Respond("application/json", response.Content);
-            var apiClient = _testHelper.CreateApiClient(_mockHttp.ToHttpClient());
-
-            var methodInfo = apiClient.GetType().GetMethod(methodName);
-
-            dynamic awaitable = methodInfo.Invoke(apiClient, null);
-            await awaitable;
-            _actual = awaitable.GetAwaiter().GetResult();
+            await CallMethod(methodName, null, response.Content);
         }
 
         [Then(@"the response should be of type (\w+)")]
@@ -62,23 +55,7 @@ namespace Features
             var paramStringValues = rawParameters.Split(",");
             var parameters = new object[] { paramStringValues[0], int.TryParse(paramStringValues[1], out var parsed) ? new Nullable<int>(parsed) : null };
 
-            Assert.NotNull(_docStringContent);
-
-            _mockHttp.ReplyWithRequestUrl();
-
-            var apiClient = _testHelper.CreateApiClient(_mockHttp.ToHttpClient());
-
-            var methodInfo = apiClient.GetType().GetMethod(methodName);
-
-            dynamic awaitable = methodInfo.Invoke(apiClient, parameters);
-            await awaitable;
-            _actual = awaitable.GetAwaiter().GetResult();
-        }
-
-        [Then(@"the requested URL should be (.+)")]
-        public void CheckRequest(string url)
-        {
-            Assert.Equal(url, _actual);
+            await CallMethod(methodName, parameters);
         }
     }
 }

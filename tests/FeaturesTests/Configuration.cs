@@ -1,8 +1,8 @@
-using Xunit.Gherkin.Quick;
-using Xunit;
-using Xunit.Abstractions;
 using Gherkin.Ast;
 using RichardSzalay.MockHttp;
+using Xunit;
+using Xunit.Abstractions;
+using Xunit.Gherkin.Quick;
 
 namespace Features
 {
@@ -26,21 +26,7 @@ namespace Features
         [When(@"calling the method (\w+) without params")]
         public async Task CallWithoutParameters(string methodName)
         {
-            _mockHttp.ReplyWithRequestUrl();
-
-            var apiClient = _testHelper.CreateApiClient(_mockHttp.ToHttpClient(), _serverIndex);
-
-            var methodInfo = apiClient.GetType().GetMethod(methodName);
-
-            dynamic awaitable = methodInfo.Invoke(apiClient, null);
-            await awaitable;
-            _actual = awaitable.GetAwaiter().GetResult();
-        }
-
-        [Then(@"the requested URL should be (.+)")]
-        public void CheckResponseType(string url)
-        {
-            Assert.Equal(url, _actual);
+            await CallMethod(methodName, null, null, _serverIndex);
         }
 
         [When(@"selecting the server at index (\d)")]

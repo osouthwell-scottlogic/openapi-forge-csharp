@@ -7,12 +7,15 @@ namespace Features
     public class TestHelper : IDisposable
     {
         private readonly string _outputPath;
+
         private readonly string _schemaFilePath;
 
         private readonly string _uniqueId;
 
         private Type _configurationType;
+
         private Type _apiClientType;
+
         private Assembly _generatedAssembly;
 
         public TestHelper(string uniqueId)
@@ -24,16 +27,9 @@ namespace Features
 
         public void GenerateApi(string schema)
         {
-            try
-            {
-                WriteToJsonFile(schema);
-                ForgeApi();
-                GetApiClientTypes();
-            }
-            catch (Exception e)
-            {
-                Assert.Null(e);
-            }
+            WriteToJsonFile(schema);
+            ForgeApi();
+            GetApiClientTypes();
         }
 
         private void WriteToJsonFile(string fileContent)
@@ -50,31 +46,7 @@ namespace Features
 
         private void ForgeApi()
         {
-            const string templateProjectPath = "..\\..\\..\\..\\";
-
-            try
-            {
-                using var cmd = new Process();
-                cmd.StartInfo.FileName = "cmd.exe";
-                cmd.StartInfo.RedirectStandardInput = true;
-                cmd.StartInfo.RedirectStandardOutput = true;
-                cmd.StartInfo.RedirectStandardError = true;
-                cmd.StartInfo.CreateNoWindow = true;
-                cmd.StartInfo.UseShellExecute = false;
-                var commandText = $"openapi-forge forge {_schemaFilePath} {templateProjectPath} -o {_outputPath} -s";
-                cmd.StartInfo.Arguments = $"/C {commandText}";
-                cmd.Start();
-                cmd.WaitForExit(1000);
-
-                using var errorReader = cmd.StandardError;
-                var errorOutput = errorReader.ReadToEnd();
-
-                Assert.Equal(string.Empty, errorOutput);
-            }
-            catch (Exception e)
-            {
-                Assert.Null(e);
-            }
+            RunCmdPropmt($"openapi-forge forge {_schemaFilePath} {Constants.TemplateProjectPath} -o {_outputPath} -s");
         }
 
         private void GetApiClientTypes()
@@ -111,29 +83,7 @@ namespace Features
 
         private void CompileCode()
         {
-            try
-            {
-                using var cmd = new Process();
-                cmd.StartInfo.FileName = "cmd.exe";
-                cmd.StartInfo.RedirectStandardInput = true;
-                cmd.StartInfo.RedirectStandardOutput = true;
-                cmd.StartInfo.RedirectStandardError = true;
-                cmd.StartInfo.CreateNoWindow = true;
-                cmd.StartInfo.UseShellExecute = false;
-                var commandText = $"dotnet build {_outputPath}/Api{_uniqueId}.csproj -o {_outputPath}/bin";
-                cmd.StartInfo.Arguments = $"/C {commandText}";
-                cmd.Start();
-                cmd.WaitForExit(1000);
-
-                using var errorReader = cmd.StandardError;
-                var errorOutput = errorReader.ReadToEnd();
-
-                Assert.Equal(string.Empty, errorOutput);
-            }
-            catch (Exception e)
-            {
-                Assert.Null(e);
-            }
+            RunCmdPropmt($"dotnet build {_outputPath}/Api{_uniqueId}.csproj -o {_outputPath}/bin");
         }
 
         public object CreateApiClient(HttpClient client, int? serverIndex = null)
@@ -173,6 +123,25 @@ namespace Features
             _apiClientType = null;
             _configurationType = null;
             _generatedAssembly = null;
+        }
+
+        private static void RunCmdPropmt(string commandText)
+        {
+            using var cmd = new Process();
+            cmd.StartInfo.FileName = "cmd.exe";
+            cmd.StartInfo.RedirectStandardInput = true;
+            cmd.StartInfo.RedirectStandardOutput = true;
+            cmd.StartInfo.RedirectStandardError = true;
+            cmd.StartInfo.CreateNoWindow = true;
+            cmd.StartInfo.UseShellExecute = false;
+            cmd.StartInfo.Arguments = $"/C {commandText}";
+            cmd.Start();
+            cmd.WaitForExit(1000);
+
+            using var errorReader = cmd.StandardError;
+            var errorOutput = errorReader.ReadToEnd();
+
+            Assert.Equal(string.Empty, errorOutput);
         }
     }
 }

@@ -1,28 +1,50 @@
 const Handlebars = require("handlebars");
 const toParamName = require("./toParamName");
 const getParametersByType = require("./getParametersByType");
-const newLineAndAlignment = "\n\t\t\t\t\t";
+const newLine = "\n";
 
 const isStringType = (typeDef) => typeDef.type === 'string' && (typeDef.format === undefined || typeDef.format === 'string');
 
 const isStringArrayParam = (param) => param.schema.type === 'array' && param.schema.items && isStringType(param.schema.items);
 
-const asQueryParam = (param) => isStringType(param.schema) ? `Uri.EscapeDataString(${toParamName(param.name)})` : toParamName(param.name);
+const serialiseArrayParam = (param) => {
+    const safeParamName = toParamName(param.name);
+    const serialisedParam = `{string.Join("&", ${safeParamName}.Select(p => $"${param.name}={${isStringArrayParam(param) ? "Uri.EscapeDataString(p)" : "p"}}"))}`;
 
-const serialiseArrayParam = (param) => `{string.Join("&", ${toParamName(param.name)}.Select(p => $"${param.name}={${isStringArrayParam(param) ? "Uri.EscapeDataString(p)" : "p"}}"))}`;
+    return `if(${safeParamName} != null && ${safeParamName}.Length > 0)
+{ ${prefixSerialisedQueryParam(serialisedParam)} }`;
+};
 
 const serialiseObjectParam = (param) => {
-    console.log(param);
+
     const safeParamName = toParamName(param.name);
     let serialisedObject = "";
     for (const [propName, objProp] of Object.entries(param.schema.properties)) {
-        serialisedObject += isStringType(objProp)
-            ? `${propName}={Uri.EscapeDataString(${safeParamName}.${propName})}`
-            : `${propName}=${safeParamName}.${propName}`;
+        serialisedParam = isStringType(objProp)
+            ? `{(${safeParamName}.${propName} == null ? string.Empty : "${propName}=" + Uri.EscapeDataString(${safeParamName}.${propName}))}`
+            : `${propName}={${safeParamName}.${propName}}`;
+
+        serialisedObject += serialisedParam + "&";
     }
-    console.log(serialisedObject);
-    return serialisedObject;
+
+    return `if(${safeParamName} != null)
+{ ${prefixSerialisedQueryParam(serialisedObject.slice(0, -1))} }`;
 };
+
+const serialisePrimitive = param => {
+    
+    const safeParamName = toParamName(param.name);
+    const escaped = isStringType(param.schema) ? `Uri.EscapeDataString(${safeParamName})` : safeParamName;
+
+    const serialisedParam = prefixSerialisedQueryParam(`${param.name}={${escaped}}`);
+    return param._optional ?
+`if(${safeParamName} != null)
+{ ${serialisedParam} }`:
+serialisedParam
+}
+
+const prefixSerialisedQueryParam = (serialisedQueryParam) =>
+    `queryString.Append($"{(queryString.Length == 0 ? "?" : "&")}${serialisedQueryParam}");`;
 
 const createQueryStringSnippet = (params) => {
 
@@ -32,7 +54,7 @@ const createQueryStringSnippet = (params) => {
         return "";
     }
 
-    let queryStringSnippet = `var queryString = new StringBuilder();` + newLineAndAlignment;
+    let queryStringSnippet = `var queryString = new StringBuilder();`;
 
     for (const queryParam of queryParams) {
         let serialisedQueryParam;
@@ -44,11 +66,11 @@ const createQueryStringSnippet = (params) => {
                 serialisedQueryParam = serialiseObjectParam(queryParam);
                 break;
             default:
-                serialisedQueryParam = `${queryParam.name}={${asQueryParam(queryParam)}}`;
+                serialisedQueryParam = serialisePrimitive(queryParam);
                 break;
         }
 
-        queryStringSnippet += (`queryString.Append($"{(queryString.Length == 0 ? "?" : "&")}${serialisedQueryParam}` + "\");" + newLineAndAlignment);
+        queryStringSnippet += (newLine + serialisedQueryParam);
     }
 
     return new Handlebars.SafeString(queryStringSnippet);
