@@ -8,7 +8,7 @@ using Xunit.Gherkin.Quick;
 namespace Features
 {
     [FeatureFile(nameof(RequestBody) + Constants.FeatureFileExtension)]
-    public sealed class RequestBody : BaseFeature
+    public sealed class RequestBody : FeatureBase
     {
 
         public RequestBody(ITestOutputHelper testOutputHelper) : base(testOutputHelper)

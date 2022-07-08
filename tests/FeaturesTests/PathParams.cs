@@ -8,7 +8,7 @@ using Xunit.Gherkin.Quick;
 namespace Features
 {
     [FeatureFile(nameof(PathParams) + Constants.FeatureFileExtension)]
-    public sealed class PathParams : BaseFeature
+    public sealed class PathParams : FeatureBase
     {
         public PathParams(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
         {

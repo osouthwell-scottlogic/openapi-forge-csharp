@@ -8,7 +8,7 @@ using Xunit.Gherkin.Quick;
 namespace Features
 {
     [FeatureFile(nameof(Response) + Constants.FeatureFileExtension)]
-    public sealed class Response : BaseFeature
+    public sealed class Response : FeatureBase
     {
         private readonly Dictionary<string, string> _responses = new Dictionary<string, string>();
 

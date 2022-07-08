@@ -1,5 +1,6 @@
 using System;
 using System.Reflection;
+using System.Runtime.Intrinsics.X86;
 using Gherkin.Ast;
 using RichardSzalay.MockHttp;
 using Xunit;
@@ -8,7 +9,7 @@ using Xunit.Gherkin.Quick;
 
 namespace Features
 {
-    public class BaseFeature : Xunit.Gherkin.Quick.Feature
+    public class FeatureBase : Xunit.Gherkin.Quick.Feature
     {
         protected readonly ITestOutputHelper _testOutputHelper;
 
@@ -22,7 +23,7 @@ namespace Features
 
         protected HttpRequestMessage _request;
 
-        public BaseFeature(ITestOutputHelper testOutputHelper)
+        public FeatureBase(ITestOutputHelper testOutputHelper)
         {
             _testOutputHelper = testOutputHelper;
             _testHelper = new TestHelper(System.Guid.NewGuid().ToString().Substring(0, 8));
@@ -42,7 +43,10 @@ namespace Features
         {
             var expected = new Uri(url);
             var actual = new Uri(_actual.ToString());
-            Assert.True(expected.Equals(actual));
+            Assert.Equal(expected.Host, actual.Host);
+            Assert.Equal(expected.AbsolutePath, actual.AbsolutePath);
+            var separators = new[] { '?', '&' };
+            Assert.Equal(expected.Query.Split(separators).OrderBy(s => s), actual.Query.Split(separators).OrderBy(s => s));
         }
 
         protected async Task CallMethod(string methodName, object[] parameters = null, string response = null, int? serverIndex = 0)

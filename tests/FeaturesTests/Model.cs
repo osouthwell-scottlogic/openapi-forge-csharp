@@ -1,19 +1,19 @@
-using Xunit.Gherkin.Quick;
+using Gherkin.Ast;
 using Xunit;
 using Xunit.Abstractions;
-using Gherkin.Ast;
+using Xunit.Gherkin.Quick;
 
 namespace Features
 {
     [FeatureFile(nameof(Model) + Constants.FeatureFileExtension)]
-    public sealed class Model : BaseFeature
+    public sealed class Model : FeatureBase
     {
         public Model(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
         {
         }
 
         [When(@"generating an API from the following specification")]
-        public void Generate(DocString schema)
+        new public void Generate(DocString schema)
         {
             Assert.False(string.IsNullOrWhiteSpace(schema.Content), $"Parameter '{nameof(schema)}' must not be null or whitespace");
             _docStringContent = schema.Content;

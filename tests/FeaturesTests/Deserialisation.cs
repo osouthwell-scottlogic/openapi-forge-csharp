@@ -1,13 +1,13 @@
-using Xunit.Gherkin.Quick;
-using Xunit;
-using Xunit.Abstractions;
 using Gherkin.Ast;
 using RichardSzalay.MockHttp;
+using Xunit;
+using Xunit.Abstractions;
+using Xunit.Gherkin.Quick;
 
 namespace Features
 {
     [FeatureFile(nameof(Deserialization) + Constants.FeatureFileExtension)]
-    public sealed class Deserialization : BaseFeature
+    public sealed class Deserialization : FeatureBase
     {
         private readonly Dictionary<string, string> _responses;
 

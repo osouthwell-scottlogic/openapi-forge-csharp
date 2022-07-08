@@ -7,7 +7,7 @@ using Xunit.Gherkin.Quick;
 namespace Features
 {
     [FeatureFile(nameof(Configuration) + Constants.FeatureFileExtension)]
-    public sealed class Configuration : BaseFeature
+    public sealed class Configuration : FeatureBase
     {
         private int? _serverIndex;
 
