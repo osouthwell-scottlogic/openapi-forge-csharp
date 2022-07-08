@@ -15,10 +15,10 @@ namespace Features
         }
 
 
-        [When(@"calling the method (\w+) with parameters ""(.+)""")]
-        public async Task CallMethodWithParameters(string methodName, string jsonTextObect)
+        [When(@"calling the method (\w+) with (?:object|array|parameters) ""(.+)""")]
+        public async Task CallMethodWithStringParameters(string methodName, string parametersString)
         {
-            var inlineObj = _testHelper.JsonToTypeInstance("ObjectResponse", jsonTextObect);
+            var inlineObj = _testHelper.JsonToTypeInstance("ObjectResponse", parametersString);
 
             await CallMethod(methodName, new object[] { inlineObj });
         }

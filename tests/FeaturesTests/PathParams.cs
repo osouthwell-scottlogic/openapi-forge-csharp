@@ -14,15 +14,15 @@ namespace Features
         {
         }
 
-        [When(@"calling the method (\w+) with parameter(s*) ""(.+)""")]
-        public async Task CallMethodWithStringParameters(string methodName, string isSimpleParam,
-            string parametersString)
+        [When(@"calling the method (\w+) with (object|array|parameters) ""(.+)""")]
+        public async Task CallMethodWithStringParameters(string methodName, string paramType, string parametersString)
         {
-            var parameters = isSimpleParam == "s"
-                ? parametersString.Split(",").Length == 2
-                    ? new object[] { parametersString.Split(",") }
-                    : parametersString.Split(",")
-                : new object[] { _testHelper.JsonToTypeInstance("InlineObject1", parametersString) };
+            var parameters = paramType switch
+            {
+                "object" => new object[] { _testHelper.JsonToTypeInstance("InlineObject1", parametersString) },
+                "array" => new object[] { parametersString.Split(",") },
+                _ => parametersString.Split(",")
+            };
 
             await CallMethod(methodName, parameters);
         }

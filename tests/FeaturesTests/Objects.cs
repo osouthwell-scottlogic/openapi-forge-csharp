@@ -34,7 +34,7 @@ namespace Features
             Assert.Equal(propValue, propInfo.GetValue(_actual).ToString());
         }
 
-        [When(@"calling the method (\w+) with parameters ""(.+)""")]
+        [When(@"calling the method (\w+) with (?:object|array|parameters) ""(.+)""")]
         public async Task CallMethodWithParameters(string methodName, string jsonTextObect)
         {
             var inlineObj = _testHelper.JsonToTypeInstance("InlineObject1", jsonTextObect);
