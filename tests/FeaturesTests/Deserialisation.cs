@@ -47,20 +47,12 @@ namespace Features
             Assert.EndsWith(expectedType, _actual.GetType().Name);
         }
 
-        [And(@"the response should have a property (id) with value (\d+)")]
-        public void CheckResponseIntegerProperties(string propertyName, string expectedPropValue)
+        [And(@"the response should have a property (id|value) with value (.+)")]
+        public void CheckResponseIdProperty(string propName, string propValue)
         {
-            var propInfo = _actual.GetType().GetProperty(propertyName);
+            var propInfo = _actual.GetType().GetProperty(propName);
             Assert.NotNull(propInfo);
-            Assert.Equal(int.Parse(expectedPropValue), propInfo.GetValue(_actual));
-        }
-
-        [And(@"the response should have a property (value) with value (\w+)")]
-        public void CheckResponseStringProperty(string propertyName, string expectedPropValue)
-        {
-            var propInfo = _actual.GetType().GetProperty(propertyName);
-            Assert.NotNull(propInfo);
-            Assert.Equal(expectedPropValue, propInfo.GetValue(_actual));
+            Assert.Equal(propValue, propInfo.GetValue(_actual).ToString());
         }
 
         [And(@"the response should be equal to (""[\w\s]+"")")]
