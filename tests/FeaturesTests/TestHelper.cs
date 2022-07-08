@@ -10,7 +10,7 @@ namespace Features
 
         private readonly string _schemaFilePath;
 
-        private readonly string _uniqueId;
+        private readonly string _testId;
 
         private Type _configurationType;
 
@@ -18,10 +18,10 @@ namespace Features
 
         private Assembly _generatedAssembly;
 
-        public TestHelper(string uniqueId)
+        public TestHelper(string testId)
         {
-            _uniqueId = uniqueId;
-            _outputPath = $".\\generated-tests\\{uniqueId}";
+            _testId = testId;
+            _outputPath = $".\\generated-tests\\{testId}";
             _schemaFilePath = $"{_outputPath}\\schema.json";
         }
 
@@ -58,14 +58,14 @@ namespace Features
 
         private void StoreApiClientType()
         {
-            _generatedAssembly = Assembly.LoadFrom(Path.GetFullPath($"{_outputPath}\\bin\\Api{_uniqueId}.dll"));
+            _generatedAssembly = Assembly.LoadFrom(Path.GetFullPath($"{_outputPath}\\bin\\Api{_testId}.dll"));
             _configurationType = _generatedAssembly.GetType("OpenApiForge.Configuration");
             _apiClientType = _generatedAssembly.GetType("OpenApiForge.ApiClient");
         }
 
         private void CreateProjectFile()
         {
-            using var sw = new StreamWriter($"{_outputPath}\\Api{_uniqueId}.csproj", false, new System.Text.UTF8Encoding());
+            using var sw = new StreamWriter($"{_outputPath}\\Api{_testId}.csproj", false, new System.Text.UTF8Encoding());
             sw.Write(@"
             <Project Sdk=""Microsoft.NET.Sdk"">
                 <PropertyGroup>
@@ -83,7 +83,7 @@ namespace Features
 
         private void CompileCode()
         {
-            RunCmdPropmt($"dotnet build {_outputPath}/Api{_uniqueId}.csproj -o {_outputPath}/bin");
+            RunCmdPropmt($"dotnet build {_outputPath}/Api{_testId}.csproj -o {_outputPath}/bin");
         }
 
         public object CreateApiClient(HttpClient client, int? serverIndex = null)

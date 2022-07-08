@@ -4,7 +4,7 @@
   "description": "OpenAPI-Forge CSharp template",
   "main": "index.js",
   "scripts": {
-    "test": "dotnet test ./FeaturesTests/FeaturesTests.csproj --logger \"console;verbosity=detailed\"" 
+    "test": "dotnet test ./tests/FeaturesTests/FeaturesTests.csproj --logger \"console;verbosity=detailed\""
   },
   "repository": {
     "type": "git",

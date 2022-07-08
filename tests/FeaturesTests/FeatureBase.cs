@@ -9,13 +9,15 @@ using Xunit.Gherkin.Quick;
 
 namespace Features
 {
-    public class FeatureBase : Xunit.Gherkin.Quick.Feature
+    public abstract class FeatureBase : Xunit.Gherkin.Quick.Feature
     {
         protected readonly ITestOutputHelper _testOutputHelper;
 
         protected readonly TestHelper _testHelper;
 
         protected readonly MockHttpMessageHandler _mockHttp;
+
+        protected readonly string _testId;
 
         protected object _actual;
 
@@ -25,13 +27,14 @@ namespace Features
 
         public FeatureBase(ITestOutputHelper testOutputHelper)
         {
+            _testId = System.Guid.NewGuid().ToString().Substring(0, 8);
             _testOutputHelper = testOutputHelper;
-            _testHelper = new TestHelper(System.Guid.NewGuid().ToString().Substring(0, 8));
+            _testHelper = new TestHelper(_testId);
             _mockHttp = new MockHttpMessageHandler();
         }
 
         [Given(@"an API with the following specification")]
-        public void Generate(DocString schema)
+        public virtual void Generate(DocString schema)
         {
             Assert.False(string.IsNullOrWhiteSpace(schema.Content), $"Parameter '{nameof(schema)}' must not be null or whitespace");
             _docStringContent = schema.Content;
