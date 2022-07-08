@@ -9,4 +9,4 @@ https://github.com/murcikan-scottlogic/openapi-forge
 ### add support for:
 
     - various object inheritence types
-    - non-default [parameter serialisation](https://swagger.io/docs/specification/serialization){:target="\_blank"} styles
+    - non-default [parameter serialisation](https://swagger.io/docs/specification/serialization){:target="_blank"} styles
