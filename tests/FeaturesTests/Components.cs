@@ -37,7 +37,11 @@ namespace Features
         public async Task CallMethodWithParameters(string methodName, string rawParameters)
         {
             var paramStringValues = rawParameters.Split(",");
-            var parameters = new object[] { paramStringValues[0], int.TryParse(paramStringValues[1], out var parsed) ? new Nullable<int>(parsed) : null };
+            var parameters = new object[]
+            {
+                paramStringValues[0],
+                int.TryParse(paramStringValues[1], out var parsed) ? new Nullable<int>(parsed) : null
+            };
 
             await CallMethod(methodName, parameters);
         }

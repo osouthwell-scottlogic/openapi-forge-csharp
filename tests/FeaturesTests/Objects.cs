@@ -10,7 +10,6 @@ namespace Features
     [FeatureFile(nameof(Objects) + Constants.FeatureFileExtension)]
     public sealed class Objects : FeatureBase
     {
-
         public Objects(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
         {
         }

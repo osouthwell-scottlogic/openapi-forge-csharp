@@ -36,7 +36,8 @@ namespace Features
         [Given(@"an API with the following specification")]
         public virtual void Generate(DocString schema)
         {
-            Assert.False(string.IsNullOrWhiteSpace(schema.Content), $"Parameter '{nameof(schema)}' must not be null or whitespace");
+            Assert.False(string.IsNullOrWhiteSpace(schema.Content),
+                $"Parameter '{nameof(schema)}' must not be null or whitespace");
             _docStringContent = schema.Content;
             _testHelper.GenerateApi(schema.Content);
         }
@@ -49,10 +50,12 @@ namespace Features
             Assert.Equal(expected.Host, actual.Host);
             Assert.Equal(expected.AbsolutePath, actual.AbsolutePath);
             var separators = new[] { '?', '&' };
-            Assert.Equal(expected.Query.Split(separators).OrderBy(s => s), actual.Query.Split(separators).OrderBy(s => s));
+            Assert.Equal(expected.Query.Split(separators).OrderBy(s => s),
+                actual.Query.Split(separators).OrderBy(s => s));
         }
 
-        protected async Task CallMethod(string methodName, object[] parameters = null, string response = null, int? serverIndex = 0)
+        protected async Task CallMethod(string methodName, object[] parameters = null, string response = null,
+            int? serverIndex = 0)
         {
             _mockHttp.When("*").Respond((HttpRequestMessage request) =>
             {
@@ -127,7 +130,9 @@ namespace Features
                     return DateTime.Parse(arg.ToString());
                 default:
                     return arg;
-            };
+            }
+
+            ;
         }
     }
 }

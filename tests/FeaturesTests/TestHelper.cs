@@ -37,7 +37,9 @@ namespace Features
             if (Directory.Exists(Path.GetDirectoryName(_schemaFilePath)))
             {
                 Directory.Delete(Path.GetDirectoryName(_schemaFilePath), true);
-            };
+            }
+
+            ;
 
             Directory.CreateDirectory(Path.GetDirectoryName(_schemaFilePath));
             using var sw = new StreamWriter(_schemaFilePath, false, new System.Text.UTF8Encoding());
@@ -65,7 +67,8 @@ namespace Features
 
         private void CreateProjectFile()
         {
-            using var sw = new StreamWriter($"{_outputPath}\\Api{_testId}.csproj", false, new System.Text.UTF8Encoding());
+            using var sw = new StreamWriter($"{_outputPath}\\Api{_testId}.csproj", false,
+                new System.Text.UTF8Encoding());
             sw.Write(@"
             <Project Sdk=""Microsoft.NET.Sdk"">
                 <PropertyGroup>

@@ -15,7 +15,8 @@ namespace Features
         [When(@"generating an API from the following specification")]
         new public void Generate(DocString schema)
         {
-            Assert.False(string.IsNullOrWhiteSpace(schema.Content), $"Parameter '{nameof(schema)}' must not be null or whitespace");
+            Assert.False(string.IsNullOrWhiteSpace(schema.Content),
+                $"Parameter '{nameof(schema)}' must not be null or whitespace");
             _docStringContent = schema.Content;
             _testHelper.GenerateApi(schema.Content);
         }
@@ -28,7 +29,8 @@ namespace Features
         }
 
         [And(@"(\w+) should have (an optional|a required) property named (\w+) of type (\w+)")]
-        public void CheckPropertyTypes(string parentTypeName, string requiredOrOptional, string propertyName, string propertyTypeName)
+        public void CheckPropertyTypes(string parentTypeName, string requiredOrOptional, string propertyName,
+            string propertyTypeName)
         {
             var isRequired = requiredOrOptional == "a required";
 
@@ -49,14 +51,15 @@ namespace Features
                     case "number":
                         Assert.Contains<Type>(propInfo.PropertyType,
                             isRequired
-                            ? new Type[] { typeof(int), typeof(long), typeof(float), typeof(double) }
-                            : new Type[] { typeof(int?), typeof(long?), typeof(float?), typeof(double?) });
+                                ? new Type[] { typeof(int), typeof(long), typeof(float), typeof(double) }
+                                : new Type[] { typeof(int?), typeof(long?), typeof(float?), typeof(double?) });
                         break;
                     case "string":
                         Assert.Equal(typeof(string), propInfo.PropertyType);
                         break;
                     default:
-                        throw new ArgumentOutOfRangeException($"{nameof(CheckPropertyTypes)} does not handle {nameof(propertyTypeName)} = '{propertyTypeName}'");
+                        throw new ArgumentOutOfRangeException(
+                            $"{nameof(CheckPropertyTypes)} does not handle {nameof(propertyTypeName)} = '{propertyTypeName}'");
                 }
             }
         }
