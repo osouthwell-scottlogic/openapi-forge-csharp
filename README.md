@@ -9,5 +9,4 @@ https://github.com/murcikan-scottlogic/openapi-forge
 ### add support for:
 
     - various object inheritence types
-    - 'per request' headers
-    - anonymous response objects
+    - non-default [parameter serialisation](https://swagger.io/docs/specification/serialization/) styles
