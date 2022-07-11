@@ -6,6 +6,6 @@ namespace Features
 
         public const string BaseAddress = "https://example.com/api/v3";
 
-        public const string TemplateProjectPath = "..\\..\\..\\..\\..\\";
+        public const string TemplateProjectPath = "../../../../../";
     }
 }
