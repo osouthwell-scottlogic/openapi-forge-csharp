@@ -2,7 +2,7 @@
 
 This repository is the C# template for the [OpenAPI Forge](https://github.com/ColinEberhardt/openapi-forge), see that repository for usage instructions:
 
-https://github.com/murcikan-scottlogic/openapi-forge
+https://github.com/ScottLogic/openapi-forge
 
 ## various TODOs
 
