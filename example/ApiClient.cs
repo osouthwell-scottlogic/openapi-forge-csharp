@@ -129,13 +129,13 @@ namespace OpenApiForge
             var request = new HttpRequestMessage(new HttpMethod("delete"), requestUri)
             {
             };
-            request.Headers.Add(api_key, api_key)
+            request.Headers.Add("api_key", api_key);
 
             var response = await _client.SendAsync(request);
             response.EnsureSuccessStatusCode();
         }
 
-        public Task<ApiResponse> UploadFile(long petId, string additionalMetadata)
+        public Task<ApiResponse> uploadFile(long petId, string additionalMetadata)
         {
             throw new NotImplementedException(
                 "Operation 'uploadFile' most likely does not support json encoded requests which are not supported by openapi forge.");

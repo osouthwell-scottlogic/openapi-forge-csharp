@@ -1,3 +1,4 @@
+const Handlebars = require("handlebars");
 const toParamName = require('./toParamName');
 const getParametersByType = require("./getParametersByType");
 
@@ -17,19 +18,19 @@ const createHeaderParamsSnippet = (sortedParams) => {
         const safeParamName = toParamName(headerParam.name);
         switch (headerParam.schema.type) {
             case "array":
-                headerSnippet += `request.Headers.Add(${headerParam.name}, string.Joint(",", ${safeParamName}))` + "\n";
+                headerSnippet += `request.Headers.Add("${headerParam.name}", string.Join(",", ${safeParamName}))` + ";\n";
             case "object":
                 let serialisedObject = "";
                 for (const [propName, objProp] of Object.entries(headerParam.schema.properties)) {
                     serialisedObject += `${propName},${safeParamName}.${propName}`;
                 }
-                headerSnippet += `request.Headers.Add(${headerParam.name}, ${serialisedObject})` + "\n";
+                headerSnippet += `request.Headers.Add("${headerParam.name}", ${serialisedObject})` + ";\n";
             default:
-                headerSnippet += `request.Headers.Add(${headerParam.name}, ${safeParamName})` + "\n";
+                headerSnippet += `request.Headers.Add("${headerParam.name}", ${safeParamName})` + ";\n";
         }
     }
 
-    return headerSnippet;
+    return new Handlebars.SafeString(headerSnippet);
 };
 
 module.exports = createHeaderParamsSnippet;
