@@ -21,7 +21,7 @@
     "url": "https://github.com/murcikan-scottlogic/openapi-forge-csharp/issues"
   },
   "homepage": "https://github.com/murcikan-scottlogic/openapi-forge-csharp#readme",
-  "dependencies": {
+  "devDependencies": {
     "handlebars": "^4.7.7",
     "openapi-forge": "github:scottlogic/openapi-forge"
   }
