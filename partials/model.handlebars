@@ -1,0 +1,20 @@
+    {{#if description}}
+    /**
+    * {{description}}
+    */
+    {{/if}}
+    public class {{toClassName @key}} 
+    {
+      {{#each properties}}
+        {{#if description}}
+        // {{description}}
+        {{/if}}
+        {{#if example}}
+        // e.g. {{example}}
+        {{/if}}
+        public {{nullableTypeConvert this}} {{@key}} { get; set; }
+{{#unless @last}}
+
+{{/unless}}
+      {{/each}}
+    }

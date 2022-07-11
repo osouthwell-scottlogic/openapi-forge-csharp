@@ -1,10 +1,10 @@
 {
   "name": "openapi-forge-csharp",
   "version": "0.1.0",
-  "description": "CSharp OpenAPI-Forge Client template",
+  "description": "OpenAPI-Forge CSharp template",
   "main": "index.js",
   "scripts": {
-    "test": "test"
+    "test": "dotnet test ./tests/FeaturesTests/FeaturesTests.csproj"
   },
   "repository": {
     "type": "git",
@@ -20,5 +20,9 @@
   "bugs": {
     "url": "https://github.com/murcikan-scottlogic/openapi-forge-csharp/issues"
   },
-  "homepage": "https://github.com/murcikan-scottlogic/openapi-forge-csharp#readme"
+  "homepage": "https://github.com/murcikan-scottlogic/openapi-forge-csharp#readme",
+  "devDependencies": {
+    "handlebars": "^4.7.7",
+    "openapi-forge": "github:scottlogic/openapi-forge"
+  }
 }

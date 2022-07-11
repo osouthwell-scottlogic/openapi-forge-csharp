@@ -1,0 +1,61 @@
+using System;
+using System.Collections.Generic;
+using System.Net;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Linq;
+using System.Text;
+using System.Text.Json;
+using System.Text.Json.Serialization;
+using System.Threading.Tasks;
+
+{{>namespace info.title}}
+
+    {{#if info.title}}
+    // {{info.title}}
+    {{/if}}
+    public class ApiClient  : IApiClient
+    {
+      private const string ContentType = "application/json";
+      private readonly string _baseAddress;
+      private readonly HttpClient _client;
+
+      public ApiClient(HttpClient httpClient, Configuration config) 
+      {
+        _client = httpClient;
+        _baseAddress = config.GetBaseAddress();
+      }
+
+      {{#each paths}}
+      {{setVar "path" @key}}
+      {{#each this}}
+      {{#if (pathSupportsJson this)}}
+        public async Task{{#if _response.schema}}<{{safeTypeConvert _response.schema}}>{{/if}} {{operationId}}({{#each _sortedParameters}}{{nullableTypeConvert schema _optional}} {{toParamName name}}{{#if (hasDefault schema.default)}} = {{{quoteIfString schema.default}}}{{/if}}{{#unless @last}}, {{/unless}}{{/each}})
+        {
+          {{createQueryStringSnippet _sortedParameters}}
+          var requestUri = $"{_baseAddress}{{setPathParameters @root.path _sortedParameters}}{{#if (queryParametersExist _sortedParameters)}}{queryString}{{/if}}";
+          var request = new HttpRequestMessage(new HttpMethod("{{@key}}"), requestUri){
+          {{#if (bodyParameterExists _sortedParameters)}}
+            Content = new StringContent(JsonSerializer.Serialize(body), Encoding.UTF8, ContentType)
+          {{~/if}} };
+          {{createHeaderParamsSnippet _sortedParameters}}
+          var response = await _client.SendAsync(request);
+          response.EnsureSuccessStatusCode();
+          {{#if _response.schema}}
+          var responseBody = await response.Content.ReadAsStringAsync();
+          {{createReturnStatement _response.schema}}
+          {{/if}}
+        }
+        {{#unless @last}}
+        
+        {{/unless}}
+        {{else}}
+        public Task{{#if _response.schema}}<{{safeTypeConvert _response.schema}}>{{/if}} {{toClassName operationId}}({{#each _sortedParameters}}{{nullableTypeConvert schema _optional}} {{name}}{{#if schema.default}} = {{{quoteIfString schema.default}}}{{/if}}{{#unless @last}}, {{/unless}}{{/each}})
+        {
+           throw new NotImplementedException("Operation '{{operationId}}' most likely does not support json encoded requests which are not supported by openapi forge.");
+        }        
+        {{/if}}
+      {{/each}}  
+      {{/each}}
+    }
+}

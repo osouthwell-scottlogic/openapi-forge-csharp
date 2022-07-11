@@ -1,0 +1,20 @@
+using System;
+using System.Collections.Generic;
+
+{{>namespace info.title}}
+
+
+{{#each components.schemas}}
+{{> model}}
+{{#unless @last}}
+
+{{/unless}}
+{{/each}}
+
+{{#each components.inlineObjects}}
+{{> model}}
+{{#unless @last}}
+
+{{/unless}}
+{{/each}}
+}
