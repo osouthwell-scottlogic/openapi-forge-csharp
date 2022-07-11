@@ -21,8 +21,8 @@ namespace Features
         public TestHelper(string testId)
         {
             _testId = testId;
-            _outputPath = $".\\generated-tests\\{testId}";
-            _schemaFilePath = $"{_outputPath}\\schema.json";
+            _outputPath = $"./generated-tests/{testId}";
+            _schemaFilePath = $"{_outputPath}/schema.json";
         }
 
         public void GenerateApi(string schema)
@@ -60,14 +60,14 @@ namespace Features
 
         private void StoreApiClientType()
         {
-            _generatedAssembly = Assembly.LoadFrom(Path.GetFullPath($"{_outputPath}\\bin\\Api{_testId}.dll"));
+            _generatedAssembly = Assembly.LoadFrom(Path.GetFullPath($"{_outputPath}/bin/Api{_testId}.dll"));
             _configurationType = _generatedAssembly.GetType("OpenApiForge.Configuration");
             _apiClientType = _generatedAssembly.GetType("OpenApiForge.ApiClient");
         }
 
         private void CreateProjectFile()
         {
-            using var sw = new StreamWriter($"{_outputPath}\\Api{_testId}.csproj", false,
+            using var sw = new StreamWriter($"{_outputPath}/Api{_testId}.csproj", false,
                 new System.Text.UTF8Encoding());
             sw.Write(@"
             <Project Sdk=""Microsoft.NET.Sdk"">
