@@ -4,6 +4,7 @@
   "description": "OpenAPI-Forge CSharp template",
   "main": "index.js",
   "scripts": {
+    "generate-api": "openapi-forge forge ./example/petstore.json . -o ./example",
     "test": "dotnet test ./tests/FeaturesTests/FeaturesTests.csproj"
   },
   "repository": {

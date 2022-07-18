@@ -50,7 +50,7 @@ using System.Threading.Tasks;
         
         {{/unless}}
         {{else}}
-        public Task{{#if _response.schema}}<{{safeTypeConvert _response.schema}}>{{/if}} {{toClassName operationId}}({{#each _sortedParameters}}{{nullableTypeConvert schema _optional}} {{name}}{{#if schema.default}} = {{{quoteIfString schema.default}}}{{/if}}{{#unless @last}}, {{/unless}}{{/each}})
+        public Task{{#if _response.schema}}<{{safeTypeConvert _response.schema}}>{{/if}} {{operationId}}({{#each _sortedParameters}}{{nullableTypeConvert schema _optional}} {{name}}{{#if schema.default}} = {{{quoteIfString schema.default}}}{{/if}}{{#unless @last}}, {{/unless}}{{/each}})
         {
            throw new NotImplementedException("Operation '{{operationId}}' most likely does not support json encoded requests which are not supported by openapi forge.");
         }        
