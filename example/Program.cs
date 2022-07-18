@@ -18,9 +18,10 @@ using var serviceProvider = services.BuildServiceProvider();
 
 var api = serviceProvider.GetRequiredService<IApiClient>();
 
-Console.WriteLine("Getting inventory..");
+Console.WriteLine("Getting pets..");
 
-var inventory = await api.getInventory();
+// e.g. Get pets by status = available
+var pets = await api.findPetsByStatus();
 
-Console.WriteLine("Inventory:");
-Console.WriteLine(JsonSerializer.Serialize(inventory));
+Console.WriteLine("Pets:");
+Console.WriteLine(JsonSerializer.Serialize(pets, new JsonSerializerOptions { WriteIndented = true }));

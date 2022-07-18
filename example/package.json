@@ -4,6 +4,6 @@
   "description": "OpenAPI-Forge CSharp example",
   "scripts": {
     "generate-api": "openapi-forge forge ./petstore.json .. -o api",
-    "start": "dotnet run"
+    "start": "dotnet run -v q"
   }
 }
