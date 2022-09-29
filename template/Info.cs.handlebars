@@ -6,7 +6,7 @@ using System.Text;
 
   public static class Info 
   {
-    {{#each info}}
+    {{#each _info}}
     public 
     {{#if (isObj this) }}{{capitalizeFirst @key}}{{else}}String{{/if}} {{capitalizeFirst @key}} { get;set; }=  
     {{#if (isObj this) }}
@@ -20,7 +20,7 @@ using System.Text;
     {{/each}}
   }
 
-  {{#each info}}
+  {{#each _info}}
   {{#if (isObj this) }}
   public class {{capitalizeFirst @key}}
   {
