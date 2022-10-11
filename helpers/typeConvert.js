@@ -1,4 +1,4 @@
-const toSafeName = require('./toClassName');
+const toSafeName = require("./toClassName");
 
 const fromFormat = (propFormat) => {
   switch (propFormat) {
@@ -58,9 +58,7 @@ const typeConvert = (prop) => {
     ? fromFormat(prop.format)
     : fromType(prop.type, prop.additionalProperties, prop.items);
 
-  return type === ""
-    ? "object"
-    : type;
+  return type === "" ? "object" : type;
 };
 
 module.exports = typeConvert;

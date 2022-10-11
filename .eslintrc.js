@@ -1,16 +1,12 @@
 module.exports = {
   env: {
-    node: true
+    node: true,
   },
-    "root": true,
-    "plugins": [
-    ],
-    "parserOptions": {
-        ecmaVersion: "latest",
-      },
-    "extends": [
-      "eslint:recommended",
-    ],
-    "rules": {
-    }
-  };
+  root: true,
+  plugins: [],
+  parserOptions: {
+    ecmaVersion: "latest",
+  },
+  extends: ["eslint:recommended"],
+  rules: {},
+};

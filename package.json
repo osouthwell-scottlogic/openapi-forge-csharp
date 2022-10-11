@@ -7,7 +7,9 @@
     "generate-api": "openapi-forge forge ./example/petstore.json . -o ./example",
     "test": "node test",
     "lint:check": "eslint .",
-    "lint:write": "eslint --fix ."
+    "lint:write": "eslint --fix .",
+    "format:check": "node format check",
+    "format:write": "node format write"
   },
   "repository": {
     "type": "git",
