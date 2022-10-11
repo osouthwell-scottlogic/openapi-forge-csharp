@@ -20,12 +20,13 @@ const setPathParameters = (path, sortedParams) => {
         switch (pathParam.schema.type) {
             case "array":
                 return `{string.Join(",", ${safeParamName})}`;
-            case "object":
-                let serialisedObject = "";
-                for (const [propName, objProp] of Object.entries(pathParam.schema.properties)) {
-                    serialisedObject += `${propName},{${safeParamName}.${propName}},`;
+            case "object": {
+                    let serialisedObject = "";
+                    for (const [propName] of Object.entries(pathParam.schema.properties)) {
+                        serialisedObject += `${propName},{${safeParamName}.${propName}},`;
+                    }
+                    return serialisedObject.slice(0, -1);
                 }
-                return serialisedObject.slice(0, -1);
             default:
                 return `{${safeParamName}}`;
         }

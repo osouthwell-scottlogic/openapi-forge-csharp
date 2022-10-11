@@ -31,12 +31,15 @@ const createHeaderParamsSnippet = (sortedParams) => {
         switch (headerParam.schema.type) {
             case "array":
                 headerSnippet += `request.Headers.Add("${headerParam.name}", string.Join(",", ${safeParamName}))` + ";\n";
-            case "object":
-                let serialisedObject = "";
-                for (const [propName, objProp] of Object.entries(headerParam.schema.properties)) {
-                    serialisedObject += `${propName},${safeParamName}.${propName}`;
+                break;
+            case "object": {
+                    let serialisedObject = "";
+                    for (const [propName] of Object.entries(headerParam.schema.properties)) {
+                        serialisedObject += `${propName},${safeParamName}.${propName}`;
+                    }
+                    headerSnippet += `request.Headers.Add("${headerParam.name}", ${serialisedObject})` + ";\n";
+                    break;
                 }
-                headerSnippet += `request.Headers.Add("${headerParam.name}", ${serialisedObject})` + ";\n";
             default:
                 headerSnippet += `request.Headers.Add("${headerParam.name}", ${safeParamName})` + ";\n";
         }

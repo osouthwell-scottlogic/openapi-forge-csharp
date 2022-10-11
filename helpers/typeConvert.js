@@ -1,6 +1,6 @@
 const toSafeName = require('./toClassName');
 
-fromFormat = (propFormat) => {
+const fromFormat = (propFormat) => {
   switch (propFormat) {
     case "int32":
       return "int";
@@ -22,7 +22,7 @@ fromFormat = (propFormat) => {
   }
 };
 
-fromType = (propType, additionalProperties, items) => {
+const fromType = (propType, additionalProperties, items) => {
   switch (propType) {
     case "integer":
       return "int";

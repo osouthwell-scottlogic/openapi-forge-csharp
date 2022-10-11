@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "generate-api": "openapi-forge forge ./example/petstore.json . -o ./example",
-    "test": "node test"
+    "test": "node test",
+    "lint:check": "eslint .",
+    "lint:write": "eslint --fix ."
   },
   "repository": {
     "type": "git",
@@ -23,6 +25,7 @@
   },
   "homepage": "https://github.com/murcikan-scottlogic/openapi-forge-csharp#readme",
   "devDependencies": {
+    "eslint": "^8.24.0",
     "handlebars": "^4.7.7",
     "openapi-forge": "github:scottlogic/openapi-forge#4aecbe5d8f47369ed13f1e2315a4999d78cd00cb",
     "path": "^0.12.7"

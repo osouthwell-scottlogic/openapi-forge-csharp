@@ -20,7 +20,7 @@ const serialiseObjectParam = (param) => {
     const safeParamName = toParamName(param.name);
     let serialisedObject = "";
     for (const [propName, objProp] of Object.entries(param.schema.properties)) {
-        serialisedParam = isStringType(objProp)
+        let serialisedParam = isStringType(objProp)
             ? `{(${safeParamName}.${propName} == null ? string.Empty : "${propName}=" + Uri.EscapeDataString(${safeParamName}.${propName}))}`
             : `${propName}={${safeParamName}.${propName}}`;
 
