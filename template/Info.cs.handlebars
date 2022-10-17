@@ -7,7 +7,7 @@ using System.Text;
   public static class Info 
   {
     {{#each _info}}
-    public {{#if (isObj this) }}{{capitalizeFirst @key}}{{else}}String{{/if}} {{capitalizeFirst @key}} { get;set; }=  
+    public static {{#if (isObj this) }}{{capitalizeFirst @key}}{{else}}String{{/if}} {{capitalizeFirst @key}} { get;set; }=  
     {{#if (isObj this) }}
       new {{capitalizeFirst @key}} {
     {{#each this}}

@@ -16,7 +16,7 @@ const serialiseArrayParam = (param) => {
   const safeParamName = toParamName(param.name);
   const serialisedParam = `{string.Join("&", ${safeParamName}.Select(p => $"${
     param.name
-  }={${isStringArrayParam(param) ? "Uri.EscapeDataString(p)" : "p"}}"))}`;
+  }={${isStringArrayParam(param) ? "HttpUtility.UrlEncode(p)" : "p"}}"))}`;
 
   return `if(${safeParamName} != null && ${safeParamName}.Length > 0)
 { ${prefixSerialisedQueryParam(serialisedParam)} }`;
@@ -27,7 +27,7 @@ const serialiseObjectParam = (param) => {
   let serialisedObject = "";
   for (const [propName, objProp] of Object.entries(param.schema.properties)) {
     let serialisedParam = isStringType(objProp)
-      ? `{(${safeParamName}.${propName} == null ? string.Empty : "${propName}=" + Uri.EscapeDataString(${safeParamName}.${propName}))}`
+      ? `{(${safeParamName}.${propName} == null ? string.Empty : "${propName}=" + HttpUtility.UrlEncode(${safeParamName}.${propName}))}`
       : `${propName}={${safeParamName}.${propName}}`;
 
     serialisedObject += serialisedParam + "&";
@@ -40,7 +40,7 @@ const serialiseObjectParam = (param) => {
 const serialisePrimitive = (param) => {
   const safeParamName = toParamName(param.name);
   const escaped = isStringType(param.schema)
-    ? `Uri.EscapeDataString(${safeParamName})`
+    ? `HttpUtility.UrlEncode(${safeParamName})`
     : safeParamName;
 
   const serialisedParam = prefixSerialisedQueryParam(
