@@ -29,7 +29,7 @@
   "devDependencies": {
     "eslint": "^8.24.0",
     "handlebars": "^4.7.7",
-    "openapi-forge": "github:scottlogic/openapi-forge#1f3af317a126062b10958d4e12eb2d620a1ea61f",
+    "openapi-forge": "github:scottlogic/openapi-forge#776b77c9f1b4595d3660041a4bc4853a4c08b8e8",
     "path": "^0.12.7"
   }
 }
