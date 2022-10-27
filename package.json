@@ -31,5 +31,8 @@
     "handlebars": "^4.7.7",
     "openapi-forge": "github:scottlogic/openapi-forge#776b77c9f1b4595d3660041a4bc4853a4c08b8e8",
     "path": "^0.12.7"
+  },
+  "engines": {
+    "node": ">=16.0.0"
   }
 }
