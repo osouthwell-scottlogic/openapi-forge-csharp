@@ -9,7 +9,8 @@
     "lint:check": "eslint .",
     "lint:write": "eslint --fix .",
     "format:check": "node format check",
-    "format:write": "node format write"
+    "format:write": "node format write",
+    "format:output": "echo Automatic formating is not available for this generator:"
   },
   "repository": {
     "type": "git",
