@@ -6,11 +6,11 @@
   "scripts": {
     "generate-api": "openapi-forge forge ./example/petstore.json . -o ./example",
     "test": "node test",
-    "lint:check": "eslint .",
-    "lint:write": "eslint --fix .",
-    "format:check": "node format check",
-    "format:write": "node format write",
-    "format:output": "echo Automatic formating is not available for this generator:"
+    "lint:check:all": "eslint .",
+    "lint:write:all": "eslint --fix .",
+    "format:check:all": "node format check",
+    "format:write:all": "node format write",
+    "format:write": "echo Automatic formatting is not available for this generator:"
   },
   "repository": {
     "type": "git",

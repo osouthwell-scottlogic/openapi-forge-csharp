@@ -7,7 +7,7 @@ on:
     branches: [master]
 
 jobs:
-  run-code-format:
+  format:
     name: Code Format
     runs-on: ubuntu-latest
     strategy:
@@ -28,4 +28,4 @@ jobs:
         run: npm ci
 
       - name: Code Format
-        run: npm run format:check
+        run: npm run format:check:all
